@@ -1,0 +1,55 @@
+#Importing libraries
+import pandas as pd 
+import streamlit as st 
+
+#Application configuration
+st.title("Temple University AI reiemburstment assisant")
+st.header("Faculty and Staff Reimbursment ")
+st.divider()
+uploaded_file = st.file_uploader("Upload Expense Report | File type: CSV, PDF", type=None,max_upload_size=1024)
+
+
+#Data analysis (columns)
+def analyze_columns(df):
+    for index, column in enumerate(df.columns):
+        st.write(
+        f"Index: {index}, "
+        f"Column: {column}, "
+        f"Data type: {df[column].dtype}"
+        )
+#Data extraction
+if st.button("Extract"):
+    if uploaded_file is not None:
+
+        if uploaded_file.name.lower().endswith(".csv"):
+            st.success("Data Extracted!")
+            df = pd.read_csv(uploaded_file)
+            #Standardize columns 
+            df.columns = (
+            df.columns.str.strip()
+            .str.lower()
+            .str.replace(" ", "_")
+            .str.replace("-", "_")
+            )
+
+            st.write("Detected Columns:", df.columns.tolist())
+        #st.dataframe(df)
+            #Analyze each column
+            analyze_columns(df)
+            #st.dataframe(df)
+            #st.success("Data Extracted!")
+
+        else:
+            st.warning ("File type not supported!")
+    else:
+        st.warning("Please upload a file!")
+
+# def analyze_columns(df):
+#     for index, column in enumerate(df.columns):
+#         st.write(
+#             f"Index: {index}, "
+#             f"Column: {column}, "
+#             f"Data type: {df[column].dtype}"
+#         )
+#         analyze_columns(df)
+    
